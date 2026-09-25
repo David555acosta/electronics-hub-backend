@@ -1,21 +1,21 @@
 
 services:
-  #spring-boot:
-    #build: ./
-    #mem_reservation: 512M
-    #ports:
-     # - "9526:9526"
-    #depends_on:
-     # postgres:
-       # condition: service_healthy
-    #healthcheck:
-     # test: [ "CMD", "curl", "-f", "http://localhost:9526/actuator/health" ]
-     # interval: 30s
-     # timeout: 10s
-     # retries: 5
-    #environment:
-     # PROFILE: dev
-      #DB_HOST: postgres
+  spring-boot:
+    build: ./
+    mem_reservation: 512M
+    ports:
+      - "9528:9528"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9528/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    environment:
+      PROFILE: dev
+      DB_HOST: postgres
 
   postgres:
     image: pgvector/pgvector:pg17
@@ -32,7 +32,8 @@ services:
       test: [ "CMD-SHELL", "pg_isready -U root -d spring" ]
       interval: 10s
       timeout: 10s
-      retries: 3
+      retries: 5
+      start_period: 10s
 
 volumes:
   postgres_data:
